@@ -13,11 +13,11 @@ def get_env(name: str) -> str:
 def get_db_connection():
 
     connection = psycopg2.connect(
-        host=get_env("DB_HOST"),
-        port=get_env("DB_PORT"),
-        database=get_env("DB_NAME"),
-        user=get_env("DB_USER"),
-        password=get_env("DB_PASSWORD")
+        host=get_env("POSTGRES_HOST"),
+        port=get_env("POSTGRES_PORT"),
+        database=get_env("POSTGRES_DB"),
+        user=get_env("POSTGRES_USER"),
+        password=get_env("POSTGRES_PASSWORD")
     )
     return connection
 
