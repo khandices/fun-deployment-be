@@ -1,5 +1,6 @@
 from flask import Flask
 from dotenv import load_dotenv
+from .routes.jobs import jobs_bp
 
 
 def create_app() -> Flask:
@@ -9,6 +10,8 @@ def create_app() -> Flask:
     @app.route("/")
     def home():
         return "Welcome to the Funemployment App!"
+
+    app.register_blueprint(jobs_bp)
 
     return app
 
