@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Date, Boolean
-from db import Base
+from ..db import Base
 
 class Job(Base):
     __tablename__ = "jobs"
@@ -13,4 +13,4 @@ class Job(Base):
     referral = Column(Boolean, nullable=False)
 
     def to_dict(self):
-        return  {column.name: getattr(self, column.name) for column in self.__table__.columns}
+        return  {col.name: getattr(self, col.name) for col in self.__table__.columns}

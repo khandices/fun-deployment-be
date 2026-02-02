@@ -8,11 +8,18 @@ import psycopg2
 load_dotenv()
 Base = declarative_base()
 
-DB_USER = os.getenv("POSTGRES_USER")
-DB_PASSWORD = os.getenv("POSTGRES_PASSWORD")
-DB_HOST = os.getenv("POSTGRES_HOST", "localhost")
-DB_PORT = os.getenv("POSTGRES_PORT", "5432")
-DB_NAME = os.getenv("POSTGRES_DB")
+
+def get_env(name: str) -> str:
+    value = os.getenv(name)
+    if value is None:
+        raise RuntimeError(f"Missing env var: {name}")
+    return value
+
+DB_USER = get_env("POSTGRES_USER")
+DB_PASSWORD = get_env("POSTGRES_PASSWORD")
+DB_HOST = get_env("POSTGRES_HOST")
+DB_PORT = get_env("POSTGRES_PORT")
+DB_NAME = get_env("POSTGRES_DB")
 
 if not all([DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME]):
     raise RuntimeError("Missing required database environment variables")
@@ -28,21 +35,13 @@ def get_db():
     finally:
         session.close()
 
-
-def get_env(name: str) -> str:
-    value = os.getenv(name)
-    if value is None:
-        raise RuntimeError(f"Missing env var: {name}")
-    return value
-
 def get_db_connection():
-
     connection = psycopg2.connect(
-        host=get_env("POSTGRES_HOST"),
-        port=get_env("POSTGRES_PORT"),
-        database=get_env("POSTGRES_DB"),
-        user=get_env("POSTGRES_USER"),
-        password=get_env("POSTGRES_PASSWORD")
+        host=DB_HOST,
+        port=DB_PORT,
+        database=DB_NAME,
+        user=DB_USER,
+        password=DB_PASSWORD,
     )
     return connection
 
