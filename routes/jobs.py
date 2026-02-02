@@ -48,3 +48,25 @@ def create_job():
             return jsonify(new_job.to_dict()), 201
     except SQLAlchemyError as e:
         return jsonify({"error": str(e)}), 500
+
+@jobs_bp.route('/jobs/<int:job_id>', methods=["PUT"])
+def update_job(job_id: int):
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "Request needs to be in JSON format"}, 400)
+
+    try:
+        with LocalSession() as session:
+            current_job = session.query(Job).filter(Job.id == job_id).first()
+            if not current_job:
+                return jsonify({"error": "Job not found"}), 404
+
+            for field, value in data.items():
+                if hasattr(current_job, field) and field != "id":
+                    setattr(current_job, field, value)
+
+            session.commit()
+            session.refresh(current_job)
+            return jsonify(current_job.to_dict()), 200
+    except SQLAlchemyError as e:
+        return jsonify({"error": str(e)}), 500
