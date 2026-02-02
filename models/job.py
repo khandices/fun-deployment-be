@@ -11,6 +11,17 @@ class Job(Base):
     date_applied = Column(Date, nullable=False)
     location_type = Column(String, nullable=False)
     referral = Column(Boolean, nullable=False)
+    salary = Column(Integer, nullable=True)
+    poc = Column(String, nullable=True)
+    recruiter_screen = Column(Date, nullable=True)
+    interview_1 = Column(Date, nullable=True)
+    interview_2 = Column(Date, nullable=True)
+    interview_3 = Column(Date, nullable=True)
+    interview_4 = Column(Date, nullable=True)
+    rejection_date = Column(Date, nullable=True)
+    offer_date = Column(Date, nullable=True)
+    offer_amount = Column(Integer, nullable=True)
+    notes = Column(String, nullable=True)
 
     def to_dict(self):
         return  {col.name: getattr(self, col.name) for col in self.__table__.columns}
